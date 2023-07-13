@@ -1,0 +1,122 @@
+{% extends 'base_register.html' %}
+
+{% block content %}
+{% load static %}
+
+
+<style>      
+  .bg {
+    /* The image used */
+    background-image: url("{% static 'images/back_register2.jpg' %}");
+  
+    /* Full height */
+    height: 100%;
+  
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+</style>
+
+
+{% load widget_tweaks %}
+
+<div class="bg p-4">
+
+    <div class="container-fluid text-center mb-3">
+      <a class="navbar-brand mx-auto" href="{% url 'home' %}">
+          <img src="{% static 'images/logo_nav.png' %}" alt="Logo" width="220" height="70" class="d-inline-block align-text-top">
+      </a>
+</div>
+
+
+<div class="container col-lg-8 col-10 border border-5 mb-5 rounded-5 p-4 mb-5">
+
+  <form method='POST' class="row g-3">
+    <div class="text-center">
+        <p class="formfont2">Registro</p>
+    </div>
+
+    {% csrf_token %}
+
+      <div class="col-md-6 text-center">
+        <label  class="form-label formfont">Nombre de Usuario</label>
+        {{ form.username|add_class:"form-control text-center"}}
+      </div>
+      <div class="col-md-6 text-center">
+        <label class="form-label formfont">Email</label>
+        {{ form.email|add_class:"form-control text-center"}}
+      </div>
+      <div class="col-md-6 text-center">
+          <label class="form-label formfont">Contraseña</label>
+          {{ form.password1|add_class:"form-control text-center"}}
+        </div>
+        <div class="col-md-6 text-center">
+          <label class="form-label formfont">Repetir Contraseña</label>
+          {{ form.password2|add_class:"form-control text-center"}}
+        </div>
+        <div class="col-md-6 text-center">
+          <label class="form-label formfont">Nombre</label>
+          {{ form.first_name|add_class:"form-control text-center"}}
+        </div>
+        <div class="col-md-6 text-center">
+          <label class="form-label formfont">Apellido</label>
+          {{ form.last_name|add_class:"form-control text-center"}}
+        </div>
+        <div class="col-md-12 text-center">
+          <label class="form-label formfont">Fecha de cumpleaños</label>
+          {{ form.birthday|add_class:"form-control text-center"|attr:"type:date"}}
+        </div>
+        <div class="col-12 text-center">
+          <label class="form-label formfont">Dirección</label>
+          {{ form.address|add_class:"form-control text-center"|attr:"placeholder:Ejemplo: Av Hidalgo 555 Col. Tampico"}}
+        </div>
+        <div class="col-md-6 text-center">
+          <label class="form-label formfont">Ciudad</label>
+          {{ form.city|add_class:"form-control text-center"}}
+        </div>
+        <div class="col-md-6 text-center">
+          <label class="form-label formfont">Estado</label>
+          {{ form.state|add_class:"form-control text-center"}}
+        </div>
+        <div class="col-12 text-center">
+          <label class="form-label formfont">Telefono</label>
+          {{ form.telephone|add_class:"form-control text-center"}}
+        </div>
+
+      <div class="container-fluid mt-5">
+        <div class="container-fluid col-lg-10 mx-auto">
+          <div class="col-12">
+            <div class="form-check">
+              {{ form.auth_age|add_class:"form-check-input"|attr:"type:checkbox"}}
+                <label class="form-check-label formfont">
+                  Tengo 18 años o mas.*
+                </label>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-check">
+              {{ form.send_mail|add_class:"form-check-input"|attr:"type:checkbox"}}
+                <label class="form-check-label formfont">
+                  Quiero recibir informacion de proximos conciertos en mi zona.
+                </label>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-check">
+              {{ form.terms_conds|add_class:"form-check-input"|attr:"type:checkbox"}}
+                <label class="form-check-label formfont">
+                  Al enviar este formulario acepto los teminos y condiciones* 
+                </label>
+            </div>
+          </div>
+      
+      <div class="col-12 text-center p-4">
+        <button type="submit" class="button-87 shadow mx-auto" role="button">Registrarse</button>
+      </div>
+  </form>
+</div>
+{% endblock content %}

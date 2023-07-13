@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{% load static %}
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>ButacaVentura</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- bootstrap css -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- main css -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}"/>
+    <!-- fevicon -->
+    <link rel="icon" href="images/fevicon.png" type="image/gif" />
+    <!-- fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap" rel="stylesheet">
+
+<style>      
+      .bg {
+        /* The image used */
+        background-image: url("{% static 'images/back_register.jpg' %}");
+      
+        /* Full height */
+        height: 100%;
+      
+        /* Center and scale the image nicely */
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+  </style>
+
+</head>
+
+<body>
+
+<div class='bg'>
+
+<nav class="navbar navbar-expand-lg p-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="">
+          <img src="{% static 'images/logo_nav.png' %}" alt="Logo" width="150" height="40" class="d-inline-block align-text-top">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav justify-content-center w-100">
+          <li class="nav-item">
+            <a class="nav-link nav-changer mx-3" aria-current="page" href="#"><i><img src="{% static 'images/icono_home.png' %}" width="30" height="30" class="d-inline-block me-3"></i>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-changer mx-3" href="#"><i><img src="{% static 'images/icono_nosotros.png' %}" width="30" height="30" class="d-inline-block me-3"></i>Nosotros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-changer mx-3" href="#"><i><img src="{% static 'images/icono_eventos.png' %}" width="30" height="30" class="d-inline-block me-3"></i>Eventos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-changer mx-3"><i><img src="{% static 'images/icono_pregunta.png' %}" width="30" height="30" class="d-inline-block me-3"></i>FAQ</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav d-flex">
+          {% if user.is_authenticated %}
+          <li class="nav-item px-3">
+              <a href="{% url 'home' %}" class="nav-link active text-white" >Hola, {{ user.username|default:'Guest' }}!</a>
+          </li>
+          <li class="nav-item px-3">
+          <a class="nav-link button-88 shadow" role="button" href="{% url 'logout' %}">Salir</a>
+          {% else %}
+          <li class="mx-2"><a class="nav-link button-87 shadow" role="button" href="{% url 'register' %}">Registro</a></li>
+          <li class="mx-2"><a class="nav-link button-87 shadow" role="button" href="{% url 'login' %}">Ingresar</a></li>
+          {% endif %}
+              </ul>
+          </li>
+      </ul>
+      </div>
+    </div>
+</nav>
+</div>
+
+      {% block content %}{% endblock content %}
+
+
+</body>
+
+
+    <!-- Footer -->
+    <footer
+            class="text-center text-lg-start text-dark"
+            style="background-color: #ECEFF1"
+            >
+      <!-- Section: Social media -->
+      <section
+               class="d-flex justify-content-center p-4 text-white"
+               style="background-color: #1D7B4B"
+               >
+        <!-- Left -->
+        <div class="me-5 mx-4">
+          <div class="">Conectate a nuestras redes sociales:</div>
+        </div>
+        <!-- Left -->
+  
+        <!-- Right -->
+        <div>
+            <a href="" class="text-white mx-4">
+                <i><img src="{% static 'images/icono_face.png' %}" width="30" height="30" class="d-inline-block"></i></a>
+            <a href="" class="text-white mx-4">
+                <i><img src="{% static 'images/icono_insta.png' %}" width="30" height="30" class="d-inline-block"></i></a>
+            <a href="http://wa.me/18326288034" class="text-white mx-4">
+                <i><img src="{% static 'images/ICONO_WHATSAPP.png' %}" width="30" height="30" class="d-inline-block"></i></a>
+        </div>
+        <!-- Right -->
+      </section>
+      <!-- Section: Social media -->
+  
+      <!-- Section: Links  -->
+      <section class="">
+        <div class="container text-center text-md-start mt-5">
+          <!-- Grid row -->
+          <div class="row mt-3">
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto my-auto ">
+              <!-- Content -->
+              <div>
+                <img src="{% static 'images/logo_footer.png' %}" alt="Logo" width="250" height="80" class="d-inline-block my-5">
+              </div>
+            </div>
+            <!-- Grid column -->
+  
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase  footerfonttitle">links</h6>
+              <hr
+                  class="mb-4 mt-0 d-inline-block mx-auto"
+                  style="width: 60px; background-color: #7c4dff; height: 2px"
+                  />
+              <p>
+                <i><img src="{% static 'images/icono_home.png' %}" width="30" height="30" class="d-inline-block me-3"></i>
+                <a href="#!" class="footerfont">Home</a>
+              </p>
+              <p>
+                <i><img src="{% static 'images/icono_nosotros.png' %}" width="30" height="30" class="d-inline-block me-3"></i>
+                <a href="#!" class="footerfont">Nosotros</a>
+              </p>
+              <p>
+                <i><img src="{% static 'images/icono_eventos.png' %}" width="30" height="30" class="d-inline-block me-3"></i>
+                <a href="#!" class="footerfont">Eventos</a>
+              </p>
+              <p>
+                <i><img src="{% static 'images/icono_pregunta.png' %}" width="30" height="30" class="d-inline-block me-3"></i>
+                <a href="#!" class="footerfont">FAQ</a>
+              </p>
+            </div>
+            <!-- Grid column -->
+  
+            <!-- Grid column -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4 border">
+              <!-- Links -->
+              <h6 class="text-uppercase footerfonttitle">Contacto</h6>
+              <hr
+                  class="mb-4 mt-0 d-inline-block mx-auto border"
+                  style="width: 60px; background-color: #7c4dff; height: 2px"
+                  />
+              <p class="footerfont">contacto@butacaventura.com</p>
+              <p class="footerfont"><i></i> Lunes a viernes de:<br> 10:00 a 18:00 hrs</p>
+              <p class="footerfont"><i></i> Sabados de: <br> 10:00 a 14:00 hrs</p>
+              <a class="footerfont" href="http://wa.me/18326288034"><i><img src="{% static 'images/ICONO_WHATSAPP.png' %}" alt="Logo" width="30" height="30" class="d-inline-block"></i> Click para Whatsapp!</a>
+              <div class="text-center">
+                <a class="footerfont" href="http://wa.me/18326288034">832 628 80 34</a>
+              </div>
+            </div>
+            <!-- Grid column -->
+          </div>
+          <!-- Grid row -->
+        </div>
+      </section>
+      <!-- Section: Links  -->
+  
+      <div
+           class="text-center p-3"
+           style="background-image: url('{% static 'images/footer.png' %}');
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    height: 100px;
+                    background-size: cover;"
+           >
+      </div>
+
+    </footer>
+    <!-- Footer -->
+
+    <div class="backgroundhome termsfont text-center p-2">
+      <a href="/terminosycondiciones/" style="color:#ffffff; border-bottom: 3px solid #efab35; display: inline-block;">
+        TÉRMINOS Y CONDICIONES
+      </a>
+      -
+      <a href="/administracion_general/" style=" color:#ffffff; border-bottom: 3px solid #efab35; display: inline-block;">
+        ADMINISTRACIÓN
+      </a>
+      -
+      <a href="/administracion_general/" style=" color:#ffffff; border-bottom: 3px solid #efab35; display: inline-block;">
+        PROMOTORES
+      </a>
+
+      <div class="">TODOS LOS DERECHOS RESERVADOS - BUTACAVENTURA
+        © 2023</div>
+    </div>
+
+
+
+
+<!-- Javascript files-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script><script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
+
+{% block script %}{% endblock script %}
+<!-- HTML !--
+
