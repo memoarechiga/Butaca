@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import CustomUser
 from .forms import CustomUserCreationForm
 from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -57,7 +58,7 @@ def activateEmail(request, user, to_email):
 class UserRegistrationView(FormView):
     form_class = CustomUserCreationForm
     template_name = 'users/register.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('email_verification')
 
     def form_valid(self, form):
         try:
@@ -72,6 +73,7 @@ class UserRegistrationView(FormView):
 
             
         except Exception as e:
+            messages.error(request, "Algo salio mal")
             messages.error(self.request, f'Error occurred: {str(e)}')
             return super().form_invalid(form)
 
@@ -88,4 +90,8 @@ class MyLoginView(LoginView):
     
     def get_success_url(self):
         # Redirect to the home page or any desired URL
-        return reverse_lazy('home')  # Replace 'home' with your desired URL name
+        return reverse_lazy('dashboard')  # Replace 'home' with your desired URL name
+
+@method_decorator(login_required, name='dispatch')
+class VerificateEmail(TemplateView):
+    template_name = 'verification_email.html'

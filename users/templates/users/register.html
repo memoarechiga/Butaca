@@ -32,12 +32,16 @@
   {% endfor %}
 {% endif %}
 
-{% if field.error %}
-  {% for error in field.errors %}
-  <div class="alert alert-{{ message.tags }} alert-dismissible fade show w-100" style="position:absolute;" role="alert">
-    <strong>{{ error }}</strong> 
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
+{% if form.errors %}
+  {% for field in form %}
+    {% if field.errors %}
+    <div class="alert alert-danger alert-{{ message.tags }} alert-dismissible fade show w-100" style="position:absolute;" role="alert">
+        {% for error in field.errors %}
+        <strong>{{ error }}</strong> 
+        {% endfor %}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endif %}
   {% endfor %}
 {% endif %}
 
@@ -155,6 +159,10 @@
       
       <div class="col-12 text-center p-4">
         <button type="submit" class="button-87 shadow mx-auto" role="button">Registrarse</button>
+      </div>
+      <div class="text-center">
+      <p class="mb-5 pb-lg-2 mx-auto" style="color: #EDAB3A;">¿Ya tienes cuenta? <a href="{% url 'login' %}"
+        style="color: #EDAB3A;">Entra aqui</a></p>
       </div>
   </form>
 </div>

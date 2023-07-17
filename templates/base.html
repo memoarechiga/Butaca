@@ -49,7 +49,7 @@
 
 <nav class="navbar navbar-expand-lg p-4">
     <div class="container-fluid">
-      <a class="navbar-brand" href="">
+      <a class="navbar-brand" href="{% url 'home' %}">
           <img src="{% static 'images/logo_nav.png' %}" alt="Logo" width="150" height="40" class="d-inline-block align-text-top">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav justify-content-center w-100">
           <li class="nav-item">
-            <a class="nav-link nav-changer mx-3" aria-current="page" href="#"><i><img src="{% static 'images/icono_home.png' %}" width="30" height="30" class="d-inline-block me-3"></i>Home</a>
+            <a class="nav-link nav-changer mx-3" aria-current="page" href="{% url 'home' %}"><i><img src="{% static 'images/icono_home.png' %}" width="30" height="30" class="d-inline-block me-3"></i>Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link nav-changer mx-3" href="#"><i><img src="{% static 'images/icono_nosotros.png' %}" width="30" height="30" class="d-inline-block me-3"></i>Nosotros</a>
@@ -73,7 +73,7 @@
         <ul class="navbar-nav d-flex">
           {% if user.is_authenticated %}
           <li class="nav-item px-3">
-              <a href="{% url 'home' %}" class="nav-link active text-white" >Hola, {{ user.username|default:'Guest' }}!</a>
+              <a href="{% url 'dashboard' %}" class="nav-link active text-white" >Hola, {{ user.username|default:'Guest' }}!</a>
           </li>
           <li class="nav-item px-3">
           <a class="nav-link button-88 shadow" role="button" href="{% url 'logout' %}">Salir</a>
