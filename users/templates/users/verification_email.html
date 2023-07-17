@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h2>Verify your email address</h2>
+  <p>Thank you for registering! Please click the link below to verify your email address:</p>
+  <a href="{{ activate_url }}">{{ activate_url }}</a>
+
+{% endblock content %}

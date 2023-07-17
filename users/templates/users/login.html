@@ -19,6 +19,16 @@
 </style>
 
 <section class="vh-100 bg">
+
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-dark alert-{{ message.tags }} alert-dismissible fade show w-100" style="position:absolute;" role="alert">
+    <strong>{{ message }}</strong> 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+{% endif %}
+
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col col-xl-10">
@@ -30,7 +40,6 @@
             </div>
             <div class="col-md-6 col-lg-7 d-flex align-items-center">
               <div class="card-body p-4 p-lg-5 text-black">
-                {% load widget_tweaks %}
 
                 <form method='POST'>
                   {% csrf_token %}
@@ -41,7 +50,7 @@
                   </div>
 
                   <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Ingresa a tu cuenta</h5>
-
+                  {% load widget_tweaks %}
                   <div class="form-outline mb-4">
                     {{ form.username|add_class:"form-control form-control-lg"}}
                     <label class="form-label" for="form2Example17">Nombre de usuario o correo electronico</label>

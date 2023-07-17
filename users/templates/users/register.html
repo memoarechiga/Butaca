@@ -3,6 +3,8 @@
 {% block content %}
 {% load static %}
 
+<script src=" https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js "></script>
+
 
 <style>      
   .bg {
@@ -17,10 +19,27 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
+
+
 </style>
 
+{% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show w-100" style="position:absolute;" role="alert">
+    <strong>{{ message }}</strong> 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+{% endif %}
 
-{% load widget_tweaks %}
+{% if field.error %}
+  {% for error in field.errors %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show w-100" style="position:absolute;" role="alert">
+    <strong>{{ error }}</strong> 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+{% endif %}
 
 <div class="bg p-4">
 
@@ -34,10 +53,12 @@
 <div class="container col-lg-8 col-10 border border-5 mb-5 rounded-5 p-4 mb-5">
 
   <form method='POST' class="row g-3">
+
     <div class="text-center">
         <p class="formfont2">Registro</p>
     </div>
 
+    {% load widget_tweaks %}
     {% csrf_token %}
 
       <div class="col-md-6 text-center">
@@ -113,10 +134,31 @@
                 </label>
             </div>
           </div>
+
+          <div class="my-4">
+              <!-- Show compact version on small screens -->
+              <div class="mx-auto col-lg-8  p-4 d-none d-lg-block">
+                {{ form.captcha }}
+                {% for error in form.captcha.errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+  
+              <!-- Show regular version on large screens -->
+              <div class="mx-auto col-lg-8  p-4 d-lg-none">
+                {{ form.captcha|add_class:"g-recaptcha"|attr:"data-size=compact" }}
+                {% for error in form.captcha.errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+          </div>
       
       <div class="col-12 text-center p-4">
         <button type="submit" class="button-87 shadow mx-auto" role="button">Registrarse</button>
       </div>
   </form>
 </div>
+
+
+
 {% endblock content %}
