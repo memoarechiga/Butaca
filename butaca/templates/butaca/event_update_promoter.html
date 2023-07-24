@@ -1,0 +1,84 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+
+<form method='POST' class="row g-3" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+    <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Modificar evento:</h5>
+    
+    <div class="col-md-6 text-center">
+        <label  class="form-label formfontblk">Nombre del Evento:</label>
+        {{ form.name|add_class:"form-control text-center shadow"}}
+      </div>
+
+    <div class="col-md-6 text-center">
+        <label  class="form-label formfontblk">Lugar:</label>
+        {{ form.location|add_class:"form-control text-center shadow"}}
+    </div>
+
+    <div class="col-md-4 text-center">
+        <label  class="form-label formfontblk">Ciudad:</label>
+        {{ form.city|add_class:"form-control text-center shadow"}}
+    </div>
+
+    <div class="col-md-4 text-center">
+        <label  class="form-label formfontblk">Estado:</label>
+        {{ form.state|add_class:"form-control text-center shadow"}}
+    </div>
+
+    <div class="col-md-4 text-center">
+        <label  class="form-label formfontblk">Pais:</label>
+        {{ form.country|add_class:"form-control text-center shadow"}}
+    </div>
+
+    <div class="col-md-6 text-center">
+        <label  class="form-label formfontblk">Costo del Boleto:</label>
+        {{ form.ticket_price|add_class:"form-control text-center shadow"}}
+    </div>
+
+    <div class="col-md-6 text-center">
+        <label  class="form-label formfontblk">Cargo del Boleto:</label>
+        {{ form.ticket_charge|add_class:"form-control text-center shadow"}}
+    </div>
+
+    <div class="text-center">
+        <label  class="form-label formfontblk">Nivel de Boleto:</label>
+        {{ form.ticket_level|add_class:"form-control text-center shadow"}}
+    </div>
+
+    <div class="text-center">
+        <label  class="form-label formfontblk">Url:</label>
+        {{ form.url|add_class:"form-control text-center shadow"}}
+    </div>
+
+    <div class="col-md-6 text-center">
+        <label  class="form-label formfontblk">Valor Minimo:</label>
+        {{ form.min_price|add_class:"form-control text-center shadow"}}
+    </div>
+
+    <div class="col-md-6 text-center">
+        <label  class="form-label formfontblk">Valor Maximo:</label>
+        {{ form.max_price|add_class:"form-control text-center shadow"}}
+    </div>
+
+    <div class="col-md-6 text-center">
+        <label  class="form-label formfontblk">Imagen Miniatura:</label>
+        {{ form.min_img|add_class:"form-control text-center shadow"}}
+    </div>
+
+    <div class="col-md-6 text-center">
+        <label  class="form-label formfontblk">Imagen Banner:</label>
+        {{ form.bann_img|add_class:"form-control text-center shadow"}}
+    </div>
+
+    <div class="col-12 text-center p-4">
+        <button type="submit" class="button-87 shadow mx-auto" role="button">Actualizar</button>
+      </div>
+
+</form>
+
+
+
+{% endblock content %}

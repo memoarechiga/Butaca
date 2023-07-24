@@ -1,7 +1,8 @@
 {% autoescape off %}
-Hi {{ user.username }},
 
-Please click on the link below to confirm your registration:
+Hola {{ user.username }},
+
+Porfavor, da click en el siguiente link para verificar tu email:
 
 {{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}
 {% endautoescape %}

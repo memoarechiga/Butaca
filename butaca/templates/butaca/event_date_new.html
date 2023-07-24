@@ -1,0 +1,52 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+
+<form method='POST' class="row g-3">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+    <div class="row">
+        <h5 class="col-lg-6 fw-normal mb-3 pb-3 hi" style="letter-spacing: 1px;">Ingresa una fecha:</h5>
+    
+        <div class="text-center col-lg-3">
+            {{ form.event|add_class:"form-control text-center shadow"|attr:"type:hidden" }}
+        </div>
+
+        <div class="text-center col-lg-3">
+            {{ form.promoter|add_class:"form-control text-center shadow"|attr:"type:hidden" }}
+        </div>
+
+    </div>
+
+    <div class="col-md-6 text-center">
+        <label  class="form-label formfontblk">Fecha:</label>
+        {{ form.date|add_class:"form-control text-center shadow"|attr:"type:date"}}
+      </div>
+
+    <div class="col-md-6 text-center">
+        <label  class="form-label formfontblk">Fecha Rifa: <i class="fas fa-rabbit-fast    "></i>:</label>
+        {{ form.draw_event|add_class:"form-control text-center shadow"|attr:"type:date"}}
+    </div>
+
+    <div class="col-md-6 text-center">
+        <label  class="form-label formfontblk">Fecha Limite Participar:</label>
+        {{ form.draw_limit_date|add_class:"form-control text-center shadow"|attr:"type:date"}}
+    </div>
+
+    <div class="col-md-6 text-center">
+        <label  class="form-label formfontblk">Horario Evento:</label>
+        {{ form.event_time|add_class:"form-control text-center shadow"|attr:"type:time"}}
+    </div>
+
+    
+
+    <div class="col-12 text-center p-4">
+        <button type="submit" class="button-87 shadow mx-auto" role="button">Agregar</button>
+      </div>
+
+</form>
+
+
+
+{% endblock content %}

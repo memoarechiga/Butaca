@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{% load static %}
+<head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>ButacaVentura</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src=" https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js "></script>
+    <!-- bootstrap css -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- main css -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <!-- fevicon -->
+    <link rel="icon" href="images/fevicon.png" type="image/gif" />
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap" rel="stylesheet">
+
+<body style="background-color: #f4f2f2;">
+    <div class="wrapper d-flex align-items-stretch">
+      <nav id="sidebar">
+          <div class="custom-menu">
+              <button type="button" id="sidebarCollapse" class="btn btn-primary" style="background-color:#EDAB3A;"></button>
+          </div>
+          
+          <div class="img bg-wrap text-center py-4" style="background-image: url({% static 'images/back_register2.jpg' %});">
+            <div class="user-logo">
+                <a href="{% url 'home' %}"><div class="img" style="background-image: url({% static 'images/logo_nav.png' %});"></div></a>
+                <h3>Promotor Panel</h3>
+            </div>
+          </div>
+          <ul class="list-unstyled components mb-5">
+            <li class="active">
+              <a href="{% url 'dashboard_promoter' %}"><span class="fa fa-home mr-3"></span> Dashboard</a></li>
+            <li>
+              <a href="{% url 'event_list_promoter' %}"><span class="fa fa-ticket mr-3 notif"></span> Eventos</a>
+            </li>
+            <li>
+              <a href="{% url 'ticket_promoter_list' %}"><span class="fa fa-ticket mr-3"></span> Tickets</a>
+            </li>
+            <li>
+              <a href="#"><span class="fa fa-cog mr-3"></span> Configuracion</a>
+            </li>
+            <li>
+              <a href="{% url 'logout' %}"><span class="fa fa-sign-out mr-3"></span> Cerrar Sesión</a>
+            </li>
+          </ul>
+      </nav>
+    
+<!-- Page Content  -->
+      <div id="content" class="p-4 p-md-5 pt-5">
+        {% block content %}{% endblock content %}
+      </div>
+    </div>
+  </div>
+</body>
+
+<footer>
+<div class="backgroundhome termsfont text-center">
+  <a href="/terminosycondiciones/" style="color:#ffffff; border-bottom: 3px solid #efab35; display: inline-block;">
+    TÉRMINOS Y CONDICIONES
+  </a>
+  -
+  <a href="/administracion_general/" style=" color:#ffffff; border-bottom: 3px solid #efab35; display: inline-block;">
+    ADMINISTRACIÓN
+  </a>
+  -
+  <a href="/administracion_general/" style=" color:#ffffff; border-bottom: 3px solid #efab35; display: inline-block;">
+    PROMOTORES
+  </a>
+
+  <div class="">TODOS LOS DERECHOS RESERVADOS - BUTACAVENTURA
+    © 2023
+  </div>
+</div>
+</footer>
+
+
+<!-- Javascript files-->
+<script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="{% static 'js/popper.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+
+{% block script %}{% endblock script %}
+<!-- HTML !--
+

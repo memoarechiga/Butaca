@@ -1,12 +1,95 @@
-{% extends 'base.html' %}
+{% extends 'base_dashboard.html' %}
 
 {% block content %}
+{% load static %}
 
-{% if user.is_authenticated %}
 
-<h2>Welcome {{ user.username }}</h2>
+<div class="row">
+    <div class="card w-100 col-lg-4 col-md-4 mx-auto my-2 shadow" style="width: 14rem;">
+        <div class="card-body">
+          <h4 class="card-title">Eventos</h4>
+          <p class="card-text">Activos</p>
+          <h2 class="card-title">{{ event_count }}</h2>
+          <div class="row">
+            <a href="{% url 'event_list' %}" class="col-6 button-87 my-1">Ir</a>
+            <a href="{% url 'event_new' %}" class="col-4 button-89 my-1">+</a>
+          </div>
+        </div>
+      </div>
 
-{% endif %}
+      <div class="card w-100 col-lg-3 col-md-4 mx-1 my-2 shadow" style="width: 14rem;">
+        <div class="card-body">
+          <h4 class="card-title">Suscriptores</h4>
+          <p class="card-text">Total</p>
+          <h2 class="card-title">{{ users_count }}</h2>
+          <a href="{% url 'suscriber_list' %}" class="button-87 my-1">Ir</a>
+        </div>
+      </div>
 
+      <div class="card w-100 col-lg-4 col-md-4 mx-auto my-2 shadow" style="width: 14rem;">
+        <div class="card-body">
+          <h4 class="card-title">Promotores</h4>
+          <p class="card-text">Total</p>
+          <h2 class="card-title">{{ pro_count }}</h2>
+          <div class="row">
+            <a href="{% url 'promoter_list' %}" class="col-6 button-87 my-1">Ir</a>
+            <a href="{% url 'register_admin' %}" class="col-4 button-89 my-1">+</a>
+          </div>
+        </div>
+      </div>
+</div>
+
+<div class='row '>
+    <div class="col-lg-4 d-grid mx-auto mt-4">
+        <div class="container">
+          <p class="formfontblkcard text-center">Eventos Recientes:</p>
+            {% for event_list in event_lists  %}
+                <button class="button-89 w-100">{{ event_list.name }}</button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-lg-7 mx-auto mt-4">
+      <canvas id="myChart" ></canvas>
+    </div>
+
+
+<script src=" https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js "></script>
+
+<script>
+// Create an array to map month numbers to month names
+const monthNames = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
+
+// Access the 'monthly_data' directly in the template without JSON.parse
+const monthlyData = {{ monthly_data|safe }};
+
+// Extract the month labels and user counts from the 'monthlyData' list
+const labels = monthlyData.map(entry => monthNames[entry.month - 1]); // Subtract 1 because month numbers start from 1
+const userCounts = monthlyData.map(entry => entry.users_count_month);
+
+
+  const ctx = document.getElementById('myChart').getContext('2d');
+  new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: labels,
+          datasets: [{
+              label: '# of Subscribers',
+              data: userCounts,
+              borderWidth: 1
+          }]
+      },
+      options: {
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      }
+  });
+</script>
 
 {% endblock content %}

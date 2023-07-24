@@ -1,0 +1,101 @@
+{% extends 'base_dashboard_prom.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h3 class="fontevents text-center">Eventos</h3>
+</div>
+
+<div>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Fecha</th>
+            <th scope="col">Evento</th>
+            <th scope="col">Lugar</th>
+            <th scope="col">Promotor</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for event in events  %}
+          <tr>
+            <th scope="row">{{ event.date }}</th>
+            <td>{{ event.name }}</td>
+            <td>{{ event.location }}</td>
+            <td>{{ event.promoter }}</td>
+            <td class="text-end  col-1"><a class="btn btn-info" href="{% url 'event_detail_promoter' event.event_id %}">Detalles</a></td>
+            <td class="text-end  col-1"><a class="btn btn-success" href="{% url 'event_update_promoter' event.event_id %}">Editar</a></td>
+            <td class="text-end col-1">
+              <!-- Delete Button -->
+              <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#{{ event.event_id }}">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<a class="btn btn-success overflow-button px-3 rounded-4" href="{% url 'event_new_promoter' %}"><h2 class="m-auto text-light">
+  +</h2>
+</a>
+
+{% for event in events  %}
+<!-- Modal -->
+<div class="modal fade" id="{{ event.event_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar Evento</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Seguro que deseas eliminar a {{ event.name }} {{ event.date }} 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="deleteEvent('{{ event.event_id }}')">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+<script>
+  function deleteEvent(eventId) {
+      // Send an AJAX request to delete the promoter with the given ID
+      // Replace 'your_delete_url' with the actual URL for the delete view
+      fetch(`/event/${eventId}/delete`, {
+          method: 'DELETE',
+          headers: {
+              'X-CSRFToken': '{{ csrf_token }}',
+          },
+      })
+      .then(response => response.json())
+      .then(data => {
+          // Handle the response, e.g., show a success message or update the promoter list
+          console.log(data);
+
+          // Close the modal
+          $('#deleteModal' + eventId).modal('hide');
+
+          // Refresh the page to show updated promoter list
+          location.reload();
+      })
+      .catch(error => {
+          // Handle errors
+          console.error('Error:', error);
+      });
+  }
+</script>
+
+
+
+
+
+{% endblock content %}
