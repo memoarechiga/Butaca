@@ -5,3 +5,5 @@ from .models import *
 
 admin.site.register(Event)
 admin.site.register(DateEvent)
+admin.site.register(DrawTicket)
+admin.site.register(Winner)

@@ -13,12 +13,12 @@ class CreateEventForm(forms.ModelForm):
         model = Event
         fields = ('name', 'location', 'ticket_price', 'active', 'promoter', 'min_img', 
                     'bann_img', 'state', 'city', 'country',  'ticket_charge', 'url', 'min_price',
-                    'max_price', 'ticket_level' )
+                    'max_price', 'ticket_level', 'bck_img' )
 
 class DateEventForm(forms.ModelForm):
     class Meta:
         model = DateEvent
-        fields = ('event', 'date', 'draw_event', 'draw_limit_date', 'event_time', 'promoter' )
+        fields = ('event', 'date', 'draw_event', 'draw_limit_date', 'event_time', 'promoter', 'ticket_quantity' )
     
     def __init__(self, *args, **kwargs):
         event_id = kwargs.pop('event_id', None)
@@ -35,3 +35,8 @@ class DateEventForm(forms.ModelForm):
             promoter = get_object_or_404(CustomUser, user_id=promoter_id)
             self.fields['promoter'].initial = promoter_id
             
+
+class DrawTicketForm(forms.ModelForm):
+    class Meta:
+        model = DrawTicket
+        fields = []  # Add other fields if needed

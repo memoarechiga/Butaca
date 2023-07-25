@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users',
     'widget_tweaks',
     'captcha',
+    'background_task',
 ]
 
 MIDDLEWARE = [
@@ -153,7 +154,3 @@ EMAIL_HOST_PASSWORD = 'seznmdbdygbrvtan'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 PASSWORD_RESET_TIMEOUT = 14400
-
-
-
-

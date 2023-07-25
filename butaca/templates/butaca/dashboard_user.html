@@ -1,9 +1,86 @@
-{% extends 'base_dashboard_prom.html' %}
+{% extends 'base_dashboard_user.html' %}
 
 {% block content %}
 {% load static %}
 
+<div style="background-color: #1D7B4B;" class="p-2">
+    <div class="text-center button-87">
+        <p class="text-center my-2 eventfont">Elige un evento:</p>
 
-<h1>User Dashboard</h1>
+        <select id="searchCityInput" class="btn btn-success me-2">
+            <option value="">Todas las Ciudades</option>
+            {% for city in cities  %}
+            <option value="{{ city.name}}">{{ city.name }}</option>
+            {% endfor %}
+        </select>
+
+        <select id="searchEventInput" class="btn btn-success ms-2">
+            <option value="">Todos los eventos</option>
+            {% for event in events  %}
+            <option value="{{ event.name }}">{{ event.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<div class="row container-fluid p-3 mx-auto" style="background-color: #EDAB3A;" id="eventList">
+    {% for event in events  %}
+
+    <div class="col-lg-3 col-md-4 event-item mb-3">
+        <a href="{% url 'event_detail_user' event.event_id %}"><div class="container mb-3"> <img src="{{ event.min_img.url }}" alt="Logo" class="d-inline-block align-text-top w-100"> </div></a>
+        <h2 class="text-center mt-2">{{ event.city }}</h2>
+        <h4 class="text-center mt-2">{{ event.name }}</h4>
+    </div>
+    {% endfor %}
+
+</div>
+
+<button class="btn btn-success overflow-button px-2 rounded-4 scrollToTopButton"><h5 class="m-auto text-light">
+    <i class="fa-solid fa-arrow-up"></i></h5>
+</button>
+
+
+<script>
+    // Function to handle button click and scroll to the top of the page
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth" // Add smooth scrolling effect
+        });
+    }
+
+    // Add event listener to the button to trigger the scrollToTop function
+    const buttons = document.querySelectorAll(".scrollToTopButton");
+    buttons.forEach((button) => {
+        button.addEventListener("click", scrollToTop);
+    });
+
+    // Function to filter events based on the search inputs
+    function filterEvents() {
+        const selectedCity = document.getElementById("searchCityInput").value.toLowerCase();
+        const selectedEvent = document.getElementById("searchEventInput").value.toLowerCase();
+
+        const eventItems = document.querySelectorAll(".event-item");
+        eventItems.forEach((eventItem) => {
+            const city = eventItem.querySelector("h2").textContent.toLowerCase();
+            const eventName = eventItem.querySelector("h4").textContent.toLowerCase();
+
+            const isCityMatch = selectedCity === "" || city.includes(selectedCity);
+            const isEventMatch = selectedEvent === "" || eventName.includes(selectedEvent);
+            const isVisible = isCityMatch && isEventMatch;
+
+            eventItem.style.display = isVisible ? "block" : "none";
+        });
+    }
+
+    // Add event listeners to the search input fields
+    const searchCityInput = document.getElementById("searchCityInput");
+    const searchEventInput = document.getElementById("searchEventInput");
+
+    searchCityInput.addEventListener("change", filterEvents);
+    searchEventInput.addEventListener("change", filterEvents);
+
+</script>
+
 
 {% endblock content %}

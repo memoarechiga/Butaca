@@ -17,8 +17,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
       {% for suscriber in suscribers  %}
+      <tr>
         <th scope="row">{{ suscriber.first_name }} {{ suscriber.last_name }}</th>
         <td>{{ suscriber.telephone }}</td>
         <td>{{ suscriber.email }}</td>
@@ -28,8 +28,8 @@
             Eliminar
           </button>
         </td>
-      {% endfor %}
       </tr>
+      {% endfor %}
     </tbody>
   </table>
 </div>

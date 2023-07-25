@@ -1,0 +1,121 @@
+{% extends 'base_dashboard_user.html' %}
+
+{% block content %}
+{% load static %}
+
+{% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-warning alert-{{ message.tags }} alert-dismissible fade show w-100" style="position:absolute;" role="alert">
+    <strong>{{ message }}</strong> 
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+{% endif %}
+
+<div style="background-image: url('{{ events.bck_img.url }}'); background-size: cover;">  
+
+    <div class="container">
+        
+        <div class=""><img src="{{ events.bann_img.url }}" alt="Logo" class="d-inline-block align-text-top w-100 shadow-lg"></div>
+        
+        <div style="background-color: #1D7B4B">
+            <div class="row text-center">
+                <div class="col-lg-6 mt-3"><h3 class="text-light">Proxima Rifa</h3>
+                    
+                    <h2 class="text-light">{{ closest_event.date }}</h2>
+                    
+                </div>
+
+                <div class="col-lg-6 mt-3"><h2 class="text-light">{{ events.location }}</h2>
+                    <h2 class="text-light">{{ events.city }}, {{ events.state }}</h2>
+                </div>
+            </div>
+
+            <div class="container p-5 text-center">
+                <h1 class="text-light">Fechas disponibles:</h1>
+                    {% if date_events %}
+                    {% for date_event in date_events  %}
+                    <button type="button" class="btn btn-warning mx-auto mt-3" data-bs-toggle="modal" data-bs-target="#{{ date_event.date_event_id }}">
+                        {{ date_event.date }} - {{ date_event.event_time }}
+                      </button>
+                    {% endfor %}
+                    {% else %}
+                    <button type="button" class="btn btn-warning mx-auto mt-3" data-bs-toggle="modal" data-bs-target="">
+                      Por el momento tenemos los ticket agostados, regresa pronto!
+                    </button>
+                    {% endif %}
+                    
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% for date_event in date_events  %}
+<!-- Modal -->
+<div class="modal fade" id="{{ date_event.date_event_id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Seguro que deseas participar para este boleto?</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Participar para: {{ date_event.event_name }} el {{ date_event.date }} a las {{ date_event.event_time }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="createTicket('{{ date_event.date_event_id }}')">Participa!</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+<script>
+  function createTicket(eventId) {
+      // Send an AJAX request to delete the promoter with the given ID
+      // Replace 'your_delete_url' with the actual URL for the delete view
+      fetch(`/create_draw_ticket/${eventId}/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+          },
+      })
+      .then(response => response.text()) // Use response.text() instead of response.json()
+  .then(data => {
+    // Handle the response data as plain text here
+    console.log(data);
+
+    // Close the modal
+    $('#deleteModal' + eventId).modal('hide');
+
+    // Refresh the page to show updated promoter list
+    location.reload();
+    
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // Add smooth scrolling effect, you can use 'auto' for instant scroll
+      });
+
+  })
+  .catch(error => {
+    // Handle errors
+    console.error('Error:', error);
+  });
+}
+</script>
+
+{% block script %}
+<script>
+  // Auto-hide the alert after 5 seconds
+  $(document).ready(function() {
+    $(".alert").delay(3000).fadeOut("slow");
+  });
+</script>
+{% endblock script %}
+
+{% endblock content %}

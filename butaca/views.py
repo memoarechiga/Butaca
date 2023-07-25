@@ -4,12 +4,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 
 
 from django.views.generic import TemplateView, ListView, FormView, DeleteView, UpdateView, DetailView
+from .tasks import *
 from users.models import *
 from .models import *
-from .forms import CreateEventForm, DateEventForm
+from .forms import CreateEventForm, DateEventForm, DrawTicketForm
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -63,7 +65,7 @@ class DashboardPromoter(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["events"] = Event.objects.filter(promoter=self.request.user)
+        context["events"] = Event.objects.filter(promoter=self.request.user).count()
         return context
     
 class DashboardUser(LoginRequiredMixin, TemplateView):
@@ -72,9 +74,13 @@ class DashboardUser(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["events"] = Event.objects.filter(active=True)
+        # Get the list of city names that have associated active events
+        active_cities = Event.objects.filter(active=True).values_list('city__name', flat=True).distinct()
+        print(active_cities)
+        # Query the City model to get only those cities with active events
+        context["cities"] = City.objects.filter(name__in=active_cities)
+
         return context
-
-
 
 
     
@@ -162,12 +168,18 @@ class EventDetailView(LoginRequiredMixin, DetailView):
         event_id = self.kwargs['event_id']
         obj = Event.objects.get(event_id=event_id)
         return obj
+    
+    def dispatch(self, request, *args, **kwargs):
+        # Check if the user is authenticated and has status set to "none"
+        if not request.user.is_authenticated or request.user.status != "admin":
+            raise Http404("You are not allowed to access this page.")
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         event_id = self.kwargs['event_id']
         context["date"] = DateEvent.objects.filter(event=event_id)
-        print(context["date"])  # Add this line to check the queryset content
         return context
 
 
@@ -182,12 +194,45 @@ class EventDetailPromoterView(LoginRequiredMixin, DetailView):
         obj = Event.objects.get(event_id=event_id)
         return obj
 
+    def dispatch(self, request, *args, **kwargs):
+        # Check if the user is authenticated and has status set to "none"
+        if not request.user.is_authenticated or request.user.status != "Promotor":
+            raise Http404("You are not allowed to access this page.")
+        
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         event_id = self.kwargs['event_id']
         context["date"] = DateEvent.objects.filter(event=event_id)
-        print(context["date"])  # Add this line to check the queryset content
         return context
+
+class EventDetailUserView(LoginRequiredMixin, DetailView):
+    model = Event
+    template_name = "butaca/event_detail_user.html"
+    context_object_name = "events"
+
+    def get_object(self, queryset=None):
+        # Fetch the object based on your custom ID field
+        event_id = self.kwargs['event_id']
+        obj = Event.objects.get(event_id=event_id)
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        event = self.object.event_id
+        # Get related DateEvent objects for the current event
+        date_events = DateEvent.objects.filter(event=event)
+        # Filter events to get the one closest to the actual date
+        current_date = datetime.datetime.now().date()
+        closest_event = Event.objects.filter(active=True, date__lt=current_date).order_by('-date').first()
+        context["closest_event"] = closest_event
+        print("current day:", current_date)
+        print("this is:", closest_event.date)
+
+        context['date_events'] = date_events
+        return context
+
 
 
 class DateEventNew(LoginRequiredMixin, FormView):
@@ -226,12 +271,13 @@ class DateEventNew(LoginRequiredMixin, FormView):
 
 class DateEventUpdate(LoginRequiredMixin, UpdateView):
     model = DateEvent
-    fields = ['date', 'draw_event', 'draw_limit_date', 'event_time' ]
+    fields = ['date', 'draw_event', 'draw_limit_date', 'event_time', 'ticket_quantity' ]
     template_name = "butaca/event_date_update.html"
     success_url = reverse_lazy('event_detail')
 
     def get_success_url(self):
-        event_id = self.kwargs.get('event_id')
+        date_event_instance = self.get_object()  # Get the DateEvent instance being updated
+        event_id = date_event_instance.event_name.event_id  # Get the event_id from the related Event instance
         return reverse_lazy('event_detail', kwargs={'event_id': event_id})
 
     def get_object(self, queryset=None):
@@ -242,13 +288,14 @@ class DateEventUpdate(LoginRequiredMixin, UpdateView):
 
 class DateEventPromoterUpdate(LoginRequiredMixin, UpdateView):
     model = DateEvent
-    fields = ['date', 'draw_event', 'draw_limit_date', 'event_time' ]
+    fields = ['date', 'draw_event', 'draw_limit_date', 'event_time', 'ticket_quantity' ]
     template_name = "butaca/event_date_update_promoter.html"
     success_url = reverse_lazy('event_detail_promoter')
 
     def get_success_url(self):
-        event_id = self.kwargs.get('event_id')
-        return reverse_lazy('event_detail', kwargs={'event_id': event_id})
+        date_event_instance = self.get_object()  # Get the DateEvent instance being updated
+        event_id = date_event_instance.event_name.event_id  # Get the event_id from the related Event instance
+        return reverse_lazy('event_detail_promoter', kwargs={'event_id': event_id})
 
     def get_object(self, queryset=None):
         # Fetch the object based on your custom ID field
@@ -358,4 +405,56 @@ def suscriber_delete(request, user_id):
         return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
 
+
+def create_draw_ticket(request, date_event_id):
+    date_event = get_object_or_404(DateEvent, date_event_id=date_event_id)
+    try:
+        if request.method == 'POST':
+            form = DrawTicketForm(request.POST)
+            if form.is_valid():
+                user = request.user
+
+                date_event_id = date_event.date_event_id
+
+                # Check if a ticket with the same date_event_id and user already exists
+                existing_ticket = DrawTicket.objects.filter(date_event__date_event_id=date_event_id, user=user).first()
+
+                if existing_ticket:
+                    # If a ticket already exists, handle it accordingly (e.g., show an error message)
+                    messages.error(request, "Ya tienes este boleto registrado.")
+                    return redirect('dashboard_user')
+
+                draw_ticket = form.save(commit=False)
+                draw_ticket.draw_ticket_id = str(uuid.uuid4())[:8]
+                draw_ticket.date_event = date_event
+                draw_ticket.date = datetime.datetime.now()
+                draw_ticket.user = user
+                draw_ticket.save()
+
+                # Optionally, you can set other fields here based on the ticket or form data
+                messages.success(request, "Boleto registrado satisfactoriamente!, Te llegara un correo con toda la información.")
+                # Redirect the user to a success page or any other desired view
+                return redirect('dashboard_user')  # Replace 'dashboard_user' with the URL name of the dashboard_user view
+
+        else:
+            return HttpResponse("Invalid request")
     
+        response_data = {'status': 'success', 'message': 'Draw ticket created successfully.'}
+
+        return JsonResponse(response_data)
+    except Exception as e:
+        # Handle errors and return an error response
+        error_data = {'status': 'error', 'message': str(e)}
+        return JsonResponse(error_data, status=400)  # Use appropriate status code for errors
+
+
+class SettingsAdmin(TemplateView):
+    template_name = "butaca/settings_admin.html"
+
+def start_task(request):
+    # You can call the task function here or in any other view
+    choose_random_winners()
+
+    # Add any other logic you need for the view
+
+    return HttpResponse("Task started successfully!")

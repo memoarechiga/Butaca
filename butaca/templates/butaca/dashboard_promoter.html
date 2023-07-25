@@ -4,6 +4,26 @@
 {% load static %}
 
 
-<h1>Promoter Dashboard</h1>
+<h1>Hola {{ user.first_name }}</h1>
+
+<div class="row mt-5">
+    <div class="col-lg-7">
+        <div class="card mb-2">
+            <div class="card-header">
+              Promotor
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">Eventos Activos</h5>
+              <h1 class="card-text">{{ events }}</h1>     
+              <a href="{% url 'event_list_promoter' %}" class="btn btn-warning">Ir a Eventos</a>
+              <a href="{% url 'event_new_promoter' %}" class="btn btn-success ms-3">Agregar Evento</a>
+            </div>
+          </div>
+    </div>
+
+    <div class="col-lg-4 text-end align-bottom container-fluid mx-auto">
+        <div class=""> <img src="{% static 'images/promoter_dashboard.jpg' %}" alt="Logo" class="img-fluid rounded-3"> </div>
+    </div>
+</div>
 
 {% endblock content %}
