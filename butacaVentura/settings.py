@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+from celery.schedules import crontab
 from pathlib import Path
 
 
@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'users',
     'widget_tweaks',
     'captcha',
-    'background_task',
+    'django_rq',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +154,27 @@ EMAIL_HOST_PASSWORD = 'seznmdbdygbrvtan'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 PASSWORD_RESET_TIMEOUT = 14400
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 360,
+    },
+}
+
+# Celery Configuration
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # URL for Redis broker
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # URL for Redis as result backend
+CELERY_TIMEZONE = 'UTC'  # Set the timezone according to your preference
+
+# Add the broker_connection_retry_on_startup option
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+CELERY_BEAT_SCHEDULE = {
+    'choose_random_winners': {
+        'task': 'butaca.tasks.choose_random_winners',
+        'schedule': crontab(minute="*/1440"),  
+    },
+}

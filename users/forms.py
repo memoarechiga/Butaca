@@ -2,7 +2,7 @@ from django import forms
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 from django.contrib.auth.forms import UserCreationForm, SetPasswordForm, PasswordResetForm
-from .models import CustomUser
+from .models import CustomUser, City, State, Country
 
 class CustomUserCreationForm(UserCreationForm):
     #captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
@@ -17,3 +17,19 @@ class PasswordResetForm(PasswordResetForm):
         super(PasswordResetForm, self).__init__(*args, **kwargs)
 
     #captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
+
+
+class CityNewForm(forms.ModelForm):
+    class Meta:
+        model = City
+        fields = ['name']  # Add other fields if needed
+
+class StateNewForm(forms.ModelForm):
+    class Meta:
+        model = State
+        fields = ['name']  # Add other fields if needed
+
+class CountryNewForm(forms.ModelForm):
+    class Meta:
+        model = Country
+        fields = ['name']  # Add other fields if needed

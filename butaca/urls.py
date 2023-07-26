@@ -31,7 +31,9 @@ urlpatterns = [
     path('suscriber_list/', SuscriberListView.as_view(), name='suscriber_list'),
     path('suscriber/<str:user_id>/delete/', suscriber_delete, name='suscriber_delete'),
 
-    path('start-task/', start_task, name='start_task'),
-    path('settings_admin/', SettingsAdmin.as_view(), name="settings_admin")
+    path('settings_admin/', SettingsAdmin.as_view(), name="settings_admin"), 
+    path('city_new/', city_new, name='city_new'),
+    path('start_task/', start_task, name="start_task"),
+
 
     ]

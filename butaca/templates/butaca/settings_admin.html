@@ -2,6 +2,134 @@
 
 {% block content %}
 
+<div class="col-lg-6 border">
+    <div class="row">
+        <div class=col-4>    
+            <a class="btn btn-primary w-100" data-bs-toggle="collapse" href="#ciudades" role="button" aria-expanded="false" aria-controls="collapseExample">
+              Ciudades
+            </a>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newcity">
+                +
+            </button>
+        </div>
+        <div class=col-4>
+            <a class="btn btn-primary w-100" data-bs-toggle="collapse" href="#estados" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Estados
+            </a>
+        </div>
+        <div class=col-4>
+            <a class="btn btn-primary w-100" data-bs-toggle="collapse" href="#paises" role="button" aria-expanded="false" aria-controls="collapseExample">
+              Paises
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="collapse" id="ciudades">
+    <div class="card card-body col-lg-6">
+        {% for city in cities  %}
+            <li>{{ city.name }}</li>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="collapse" id="estados">
+    <div class="card card-body col-lg-6">
+        {% for state in states  %}
+            <li>{{ state.name }}</li>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="collapse" id="paises">
+    <div class="card card-body col-lg-6">
+        {% for country in countries  %}
+            <li>{{ country.name }}</li>
+        {% endfor %}
+    </div>
+</div>
+
 <h3><a href="{% url 'start_task' %}">Activar Rifas</a></h3>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="newcity" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Seguro que deseas participar para este boleto?</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Assign the ID to the <form> element -->
+            <form id="cityForm">
+                <input class="form-control border" name="name"> <!-- Make sure to add the name attribute -->
+            </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="createCity()">Guardar!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<script>
+    function createCity() {
+
+        const formElement = document.getElementById('cityForm');
+        const formData = new FormData(formElement);
+
+        // Convert the JavaScript object to a JSON string
+        const jsonData = JSON.stringify(formDataObject);
+        console.log(jsonData)
+
+        // Send an AJAX request to delete the promoter with the given ID
+        // Replace 'your_delete_url' with the actual URL for the delete view
+        fetch(`/city_new/`, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: formData, // Pass the form data as the request body
+        })
+        .then(response => response.text()) // Use response.text() instead of response.json()
+    .then(data => {
+      // Handle the response data as plain text here
+      console.log(data);
+  
+      // Close the modal
+      $('#deleteModal').modal('hide');
+  
+      // Refresh the page to show updated promoter list
+      location.reload();
+      
+      window.scrollTo({
+          top: 0,
+          behavior: 'smooth' // Add smooth scrolling effect, you can use 'auto' for instant scroll
+        });
+  
+    })
+    .catch(error => {
+      // Handle errors
+      console.error('Error:', error);
+    });
+  }
+  </script>
+  
+  {% block script %}
+  <script>
+    // Auto-hide the alert after 5 seconds
+    $(document).ready(function() {
+      $(".alert").delay(3000).fadeOut("slow");
+    });
+  </script>
+  {% endblock script %}
 
 {% endblock content %}

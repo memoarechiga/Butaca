@@ -5,11 +5,13 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+import json
 
 
-from django.views.generic import TemplateView, ListView, FormView, DeleteView, UpdateView, DetailView
+from django.views.generic import TemplateView, ListView, FormView, DeleteView, UpdateView, DetailView, CreateView
 from .tasks import *
 from users.models import *
+from users.forms import CityNewForm, StateNewForm, CountryNewForm
 from .models import *
 from .forms import CreateEventForm, DateEventForm, DrawTicketForm
 
@@ -448,13 +450,41 @@ def create_draw_ticket(request, date_event_id):
         return JsonResponse(error_data, status=400)  # Use appropriate status code for errors
 
 
+
 class SettingsAdmin(TemplateView):
     template_name = "butaca/settings_admin.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["cities"] = City.objects.all()
+        context["states"] = State.objects.all()
+        context["countries"] = Country.objects.all()
+        return context
+
+def city_new(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            city_name = data.get('name', '')
+            print(city_name)
+            if city_name:
+                city = City(name=city_name)
+                city.save()
+                return JsonResponse({'status': 'success'})
+            else:
+                return JsonResponse({'status': 'error', 'message': 'City name is missing'})
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON data'})
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+            
+
+    
+
 
 def start_task(request):
     # You can call the task function here or in any other view
     choose_random_winners()
-
     # Add any other logic you need for the view
 
     return HttpResponse("Task started successfully!")

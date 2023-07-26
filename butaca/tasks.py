@@ -1,10 +1,9 @@
-from background_task import background
 import datetime
 import random
 from .models import *
+from celery import shared_task
 
-
-@background(schedule=None)
+@shared_task()
 def choose_random_winners():
     # Get the list of DateEvent objects that have draw_event set to the current date
     draw_event_date = datetime.datetime.now().date()
@@ -29,14 +28,3 @@ def choose_random_winners():
         # Save the winners to the Winner model
         for winner in winners:
             Winner.objects.create(user=winner.user, date_event=date_event)
-    
-    if repeat:
-        task = Task.objects.create(
-            task_name="choose_random_winners",  # Unique name for your task
-            task_func=__name__ + ".choose_random_winners",  # Path to your function
-            repeat=60*60*24,  # Repeat the task every 24 hours (1 day)
-            schedule=next_noon(),  # Schedule the first task to run at the next 12:00 PM
-        )
-
-        # Save the task instance to the database
-        task.save()
