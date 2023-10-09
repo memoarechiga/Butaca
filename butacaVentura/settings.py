@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'butaca',
     'users',
     'widget_tweaks',
-    'captcha',
     'django_rq',
 ]
 

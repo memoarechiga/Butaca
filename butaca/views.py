@@ -136,7 +136,7 @@ class EventUpdateview(LoginRequiredMixin, UpdateView):
     model = Event
     fields = ['name', 'location', 'ticket_price', 'active', 'promoter', 'min_img', 
                     'bann_img', 'state', 'city', 'country',  'ticket_charge', 'url', 'min_price',
-                    'max_price', 'ticket_level']
+                    'max_price', 'ticket_level', 'bck_img']
     template_name = "butaca/event_update.html"
     success_url = reverse_lazy('event_list')
 
@@ -150,7 +150,7 @@ class EventUpdatePromoterview(LoginRequiredMixin, UpdateView):
     model = Event
     fields = ['name', 'location', 'ticket_price', 'active', 'min_img', 
                     'bann_img', 'state', 'city', 'country',  'ticket_charge', 'url', 'min_price',
-                    'max_price', 'ticket_level']
+                    'max_price', 'ticket_level', 'bck_img']
     template_name = "butaca/event_update_promoter.html"
     success_url = reverse_lazy('event_list')
 

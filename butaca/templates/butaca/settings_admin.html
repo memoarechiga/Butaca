@@ -2,31 +2,56 @@
 
 {% block content %}
 
-<div class="col-lg-6 border">
+<div class="col-lg-8 ">
     <div class="row">
-        <div class=col-4>    
-            <a class="btn btn-primary w-100" data-bs-toggle="collapse" href="#ciudades" role="button" aria-expanded="false" aria-controls="collapseExample">
-              Ciudades
+
+      <div class="row col-4">
+        <div class="col-9 order-2"> <!-- 'order-2' will move this div to the right -->
+            <a class="btn btn-primary align-content-end" data-bs-toggle="collapse" href="#cities" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Ciudades
             </a>
+        </div>
+        <div class="col-2 order-1 d-grid"> <!-- 'order-1' will move this div to the left -->
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newcity">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newcity">
                 +
             </button>
         </div>
-        <div class=col-4>
-            <a class="btn btn-primary w-100" data-bs-toggle="collapse" href="#estados" role="button" aria-expanded="false" aria-controls="collapseExample">
+      </div>
+    
+
+      <div class="row col-4">
+        <div class="col-9 order-2"> <!-- 'order-2' will move this div to the right -->
+            <a class="btn btn-primary align-content-end" data-bs-toggle="collapse" href="#states" role="button" aria-expanded="false" aria-controls="collapseExample">
                 Estados
             </a>
         </div>
-        <div class=col-4>
-            <a class="btn btn-primary w-100" data-bs-toggle="collapse" href="#paises" role="button" aria-expanded="false" aria-controls="collapseExample">
-              Paises
+        <div class="col-2 order-1 d-grid"> <!-- 'order-1' will move this div to the left -->
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newstate">
+                +
+            </button>
+        </div>
+      </div>
+
+      <div class="row col-4">
+        <div class="col-9 order-2"> <!-- 'order-2' will move this div to the right -->
+            <a class="btn btn-primary align-content-end" data-bs-toggle="collapse" href="#countries" role="button" aria-expanded="false" aria-controls="collapseExample">
+                Paises
             </a>
         </div>
+        <div class="col-2 order-1 d-grid"> <!-- 'order-1' will move this div to the left -->
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newcountry">
+                +
+            </button>
+        </div>
+      </div>
+
     </div>
 </div>
 
-<div class="collapse" id="ciudades">
+<div class="collapse" id="cities">
     <div class="card card-body col-lg-6">
         {% for city in cities  %}
             <li>{{ city.name }}</li>
@@ -34,7 +59,7 @@
     </div>
 </div>
 
-<div class="collapse" id="estados">
+<div class="collapse" id="states">
     <div class="card card-body col-lg-6">
         {% for state in states  %}
             <li>{{ state.name }}</li>
@@ -42,7 +67,7 @@
     </div>
 </div>
 
-<div class="collapse" id="paises">
+<div class="collapse" id="countries">
     <div class="card card-body col-lg-6">
         {% for country in countries  %}
             <li>{{ country.name }}</li>
@@ -85,9 +110,10 @@
 
         const formElement = document.getElementById('cityForm');
         const formData = new FormData(formElement);
+        console.log(formData)
 
         // Convert the JavaScript object to a JSON string
-        const jsonData = JSON.stringify(formDataObject);
+        const jsonData = JSON.stringify(formData);
         console.log(jsonData)
 
         // Send an AJAX request to delete the promoter with the given ID
